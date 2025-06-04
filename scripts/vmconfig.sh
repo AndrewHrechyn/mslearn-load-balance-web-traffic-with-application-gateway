@@ -8,7 +8,7 @@
 
 # # Get the code for the sample app
 # cd /home/azureuser
-# git clone https://github.com/MicrosoftDocs/mslearn-load-balance-web-traffic-with-application-gateway vehicleapp
+# git clone https://github.com/AndrewHrechyn/mslearn-load-balance-web-traffic-with-application-gateway vehicleapp
 
 # # Build and publish the web app
 # export DOTNET_CLI_HOME=/home/azureuser
@@ -54,7 +54,7 @@ sudo apt-get install -y dotnet-sdk-8.0
 
 # Клонування актуального репозиторію
 cd /home/azureuser
-git clone https://github.com/MicrosoftDocs/mslearn-load-balance-web-traffic-with-application-gateway.git vehicleapp
+git clone https://github.com/AndrewHrechyn/mslearn-load-balance-web-traffic-with-application-gateway.git vehicleapp
 
 # Збірка та публікація веб-додатку
 export DOTNET_CLI_HOME=/home/azureuser
