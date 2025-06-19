@@ -1,75 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 using vehicles.Models;
 
-namespace vehicles.Controllers
+namespace vehicles.Controllers;
+
+public class VehicleRegistrationController : Controller
 {
-    public class VehicleRegistrationController : Controller
+    private readonly ILogger<VehicleRegistrationController> _logger;
+
+    public VehicleRegistrationController(ILogger<VehicleRegistrationController> logger)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _logger = logger;
+    }
 
-        public ActionResult Create()
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        ViewBag.Submitted = false;
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Create(IFormCollection collection)
+    {
+        try
         {
-            try
+            var id = collection["OwnerID"].ToString();
+            var email = collection["EmailAddress"].ToString();
+            var vehicle = collection["Vehicle"].ToString();
+            var dateRegistered = collection["DateOfRegistration"].ToString();
+
+            VehicleRegistration registration = new()
             {
-                var id = Request.Form["OwnerID"];
-                var email = Request.Form["EmailAddress"];
-                var vehicle = Request.Form["Vehicle"];
-                var dateRegistered = Request.Form["DateOfRegistration"];
+                OwnerID = id,
+                EmailAddress = email,
+                Vehicle = vehicle,
+                DateOfRegistration = DateTime.Parse(dateRegistered)
+            };
 
-                VehicleRegistration registration = new VehicleRegistration()
-                {
-                    OwnerID = id,
-                    EmailAddress = email,
-                    Vehicle = vehicle,
-                    DateOfRegistration = DateTime.Parse(dateRegistered)
-                };
+            // TODO: Save the vehicle registration in a database
 
-                // TODO: Save the vehicle registration in a database
+            ViewBag.Message = "Vehicle was registered successfully.";
+            ViewBag.Submitted = true;
 
-                ViewBag.Message = "Vehicle was registered successfully.";
-                ViewBag.Submitted = true;
-
-            }
-            catch
-            {
-                ViewBag.Message = "There was an error while registering the vehicle.";
-                ViewBag.Submitted = false;
-            }
-            return View();
         }
-
-        public IActionResult About()
+        catch
         {
-            ViewData["Message"] = "Motor Vehicle Department";
-
-            return View();
+            ViewBag.Message = "There was an error while registering the vehicle.";
+            ViewBag.Submitted = false;
         }
+        return View();
+    }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+    public IActionResult About()
+    {
+        ViewData["Message"] = "Motor Vehicle Department";
+        return View();
+    }
 
-            return View();
-        }
+    public IActionResult Contact()
+    {
+        ViewData["Message"] = "Your contact page.";
+        return View();
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
