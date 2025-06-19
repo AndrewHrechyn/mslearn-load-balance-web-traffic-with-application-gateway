@@ -1,75 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 using licenses.Models;
 
-namespace licenses.Controllers
+namespace licenses.Controllers;
+
+public class LicenseController : Controller
 {
-    public class LicenseRenewalController : Controller
+    private readonly ILogger<LicenseController> _logger;
+
+    public LicenseController(ILogger<LicenseController> logger)
     {
-        public IActionResult Index()
+        _logger = logger;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        ViewBag.Submitted = false;
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Create(IFormCollection collection)
+    {
+        try
         {
-            return View();
+            // Логіка збереження ліцензії
+            ViewBag.Message = "License was created successfully.";
+            ViewBag.Submitted = true;
         }
-
-        public ActionResult Create()
+        catch
         {
-            try
-            {
-                var licenseId = Request.Form["LicenseID"];
-                var firstName = Request.Form["FirstName"];
-                var lastName = Request.Form["LastName"];
-                var dateRenewed = Request.Form["DateOfRenewal"];
-
-                LicenseRenewal renewal = new LicenseRenewal()
-                {
-                    LicenseID = licenseId,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    DateOfRenewal = DateTime.Parse(dateRenewed)
-                };
-
-                // TODO: Save the vehicle registration in a database
-
-                ViewBag.Message = "License was renewed successfully.";
-                ViewBag.Submitted = true;
-
-            }
-            catch
-            {
-                ViewBag.Message = "There was an error while renewing the license.";
-                ViewBag.Submitted = false;
-            }
-            return View();
+            ViewBag.Message = "There was an error while creating the license.";
+            ViewBag.Submitted = false;
         }
+        return View();
+    }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Motor Vehicle Department";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
