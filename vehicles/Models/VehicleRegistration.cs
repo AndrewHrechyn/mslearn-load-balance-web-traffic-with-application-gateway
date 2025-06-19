@@ -1,12 +1,9 @@
-﻿using System;
+namespace vehicles.Models;
 
-namespace vehicles.Models
+public class VehicleRegistration
 {
-    public class VehicleRegistration
-    {
-        public string OwnerID { get; set; }
-        public string EmailAddress { get; set; }
-        public string Vehicle { get; set; }
-        public DateTime DateOfRegistration { get; set; }
-    }
+    public string OwnerID { get; set; } = string.Empty;
+    public string EmailAddress { get; set; } = string.Empty;
+    public string Vehicle { get; set; } = string.Empty;
+    public DateTime DateOfRegistration { get; set; }
 }
